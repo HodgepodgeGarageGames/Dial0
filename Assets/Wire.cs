@@ -77,9 +77,32 @@ public class Wire : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (plug_a.GetComponent<WireGrabObject>().grabber != null)
+        WireGrabObject plug_a_wiregrab = plug_a.GetComponent<WireGrabObject>();
+        WireGrabObject plug_b_wiregrab = plug_b.GetComponent<WireGrabObject>();
+
+        if (plug_a_wiregrab.grabber != null)
         {
-            if (plug_b.GetComponent<WireGrabObject>().grabber != null)
+            plug_a.position = plug_a_wiregrab.grabber.position;
+            plug_a.rotation = plug_a_wiregrab.grabber.rotation;
+        }
+        else if (plug_a_wiregrab.currently_plugged_in_to != null)
+        {
+            plug_a_wiregrab.currently_plugged_in_to.SetMyTransformTo(plug_a);
+        }
+
+        if (plug_b_wiregrab.grabber != null)
+        {
+            plug_b.position = plug_b_wiregrab.grabber.position;
+            plug_b.rotation = plug_b_wiregrab.grabber.rotation;
+        }
+        else if (plug_b_wiregrab.currently_plugged_in_to != null)
+        {
+            plug_b_wiregrab.currently_plugged_in_to.SetMyTransformTo(plug_b);
+        }
+
+        if (plug_a_wiregrab.grabber != null)
+        {
+            if (plug_b_wiregrab.grabber != null)
             {
                 if (Vector3.Distance(plug_a.position, plug_b.position) > length_actual)
                 {
@@ -89,12 +112,24 @@ public class Wire : MonoBehaviour {
             }
             else
             {
-
+                if (plug_b_wiregrab.currently_plugged_in_to != null)
+                {
+                    if (Vector3.Distance(plug_a.position, plug_b.position) > length_actual)
+                    {
+                        plug_a.position = ((plug_a.position - plug_b.position).normalized * length_actual) + plug_b.position;
+                    }
+                }
             }
         }
         else if (plug_b.GetComponent<WireGrabObject>().grabber != null)
         {
-
+            if (plug_a_wiregrab.currently_plugged_in_to != null)
+            {
+                if (Vector3.Distance(plug_a.position, plug_b.position) > length_actual)
+                {
+                    plug_b.position = ((plug_b.position - plug_a.position).normalized * length_actual) + plug_a.position;
+                }
+            }
         }
     }
 }

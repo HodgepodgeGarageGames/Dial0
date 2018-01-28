@@ -30,7 +30,6 @@ public class GrabManager : MonoBehaviour {
     {
         if (other.GetComponent<GrabObject>())
         {
-            Debug.Log("Yay");
             grab_list.Add(other.GetComponent<GrabObject>());
         }
         
@@ -46,7 +45,7 @@ public class GrabManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (Controller.GetHairTriggerDown())
+        if (Controller.GetHairTriggerUp())
         {
             if (currently_grabbing != null)
             {
@@ -55,7 +54,7 @@ public class GrabManager : MonoBehaviour {
             }
         }
 
-        if (Controller.GetHairTriggerUp())
+        if (Controller.GetHairTriggerDown())
         {
             foreach (GrabObject grabo in grab_list)
             {
